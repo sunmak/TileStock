@@ -1,3 +1,9 @@
+## Inventory reason dropdown — 22 October 2026
+
+The receipt/adjustment form now has the nine requested reason options and a conditional Other reason input. The input is hidden, disabled and optional for standard choices; choosing Other adjustment reveals and requires it. Whitespace-only explanations are rejected. Standard reasons and `Other adjustment: explanation` are saved through the unchanged stock-adjustment API and shown in the ledger.
+
+JavaScript syntax checks passed. In the isolated PostgreSQL-backed port-8009 browser demo, verified the default hidden field and all nine options, saved a New purchase received receipt, blocked empty and whitespace-only Other submissions, switched to a standard reason to hide the field, then saved Other adjustment with its explanation. Database readback confirmed exactly two valid +1 demo movements, quantity 14→16, and both exact ledger reasons; invalid submissions added no stock. The screenshot shows only fabricated demo data. No shop stock was changed. No backend/schema/dependency change was made; the previous full-suite 98-test result below was not rerun for this display-only change.
+
 ## Show all customers / invoices button fix — 22 October 2026
 
 The button previously only cleared the selected-customer filter and restored the invoice dropdown. It now also opens a selectable customer list with name, mobile, address and posted-invoice count, a name/mobile filter, and 25-row paging. Choosing a row selects the customer in the existing picker and filters their invoices/return history. Customers without posted invoices display a clear message. Typing a new picker search hides the browser and clears stale invoice/return-item selections.

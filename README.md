@@ -1,5 +1,11 @@
 # Shivam Tiles — local Windows starter
 
+## Inventory reason dropdown
+
+In **Inventory → Receive or adjust stock**, choose a reason: Opening stock, New purchase received, Stock count correction — increase, Stock count correction — decrease, Damaged / broken goods, Return to supplier, Samples / display use, Lost / missing stock, or Other adjustment.
+
+Choosing **Other adjustment** shows an **Other reason** text box. An explanation is required; blank or whitespace-only entries cannot be saved. Switching to a standard reason hides the text box. The ledger records the selected reason, or `Other adjustment: your explanation`. Enter positive quantities for additions and negative quantities for removals; manual reductions remain owner-only. Unit behavior is unchanged. This display update needs only Ctrl+F5 after installation; no new dependency, restart or database migration is required.
+
 ## Editing and corrections — version 0.6.0
 
 **Customer-list button fix:** press Ctrl+F5 in the browser after updating the source. Show all customers / invoices now opens a selectable, searchable customer list as well as clearing the invoice filter. This display fix needs no restart, new dependency or migration.
