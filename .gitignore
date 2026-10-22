@@ -1,0 +1,24 @@
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+backups/
+*.log
+.security/
+
+# Local configuration and credentials
+.env.*
+!.env.example
+*.key
+*.pem
+*.pfx
+*.p12
+# Database backups and generated archives
+*.dump
+*.backup
+*.zip
+# Editors and OS files
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
