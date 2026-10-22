@@ -1,3 +1,11 @@
+## Standard customer return reasons — 22 October 2026
+
+The customer-return form now has nine standard reasons: Excess / unused material, Wrong product ordered, Wrong product supplied, Wrong size / colour / shade, Damaged / broken goods, Defective product / quality issue, Customer changed requirement, Order cancelled, and Other reason. Other reason reveals a required explanation input; blank/whitespace-only input is blocked. Standard reasons hide the input. Existing reason strings are preserved, and the reason does not automatically change any line's Resellable checkbox.
+
+Python/JavaScript syntax checks passed. In the isolated PostgreSQL-backed port-8009 browser demo, verified the list after loading an original invoice, default hidden explanation, standard reason save, required/whitespace validation, switching away from Other reason, and a custom reason save. One resellable unit and one non-restocked unit were returned against a fabricated invoice. Database readback confirmed exactly two active return records with the exact reasons, only one unit added to stock (16→17), total return credit 2500, net invoice 3750 and customer credit 2500. Invalid explanations created no returns. Old return/reversal history remained intact. A screenshot shows fabricated demo data only. No shop return, stock or customer balance was changed.
+
+Frontend asset links were regenerated to prevent stale scripts after a browser reload. No backend/schema/dependency change was made, so the previous full-suite 98-test result below was not rerun for this display-only update. ZIP integrity and excluded-secret checks were repeated.
+
 ## Inventory reason dropdown — 22 October 2026
 
 The receipt/adjustment form now has the nine requested reason options and a conditional Other reason input. The input is hidden, disabled and optional for standard choices; choosing Other adjustment reveals and requires it. Whitespace-only explanations are rejected. Standard reasons and `Other adjustment: explanation` are saved through the unchanged stock-adjustment API and shown in the ledger.

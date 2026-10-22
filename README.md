@@ -1,5 +1,13 @@
 # Shivam Tiles — local Windows starter
 
+## Customer return reason dropdown
+
+After choosing the original invoice and loading its items, choose **Reason for return**: Excess / unused material, Wrong product ordered, Wrong product supplied, Wrong size / colour / shade, Damaged / broken goods, Defective product / quality issue, Customer changed requirement, Order cancelled, or Other reason.
+
+**Other reason** shows a required **Other return reason** text box; blank and whitespace-only explanations cannot be saved. The return history retains the standard reason, or `Other reason: your explanation`. Existing saved reasons remain unchanged. Select **Resellable** separately for each item: choosing a reason does not change stock handling automatically. Uncheck it for damaged/defective items that cannot be sold again. Original invoice quantities, credit limits, owner permissions and reversal approval rules are unchanged.
+
+This is a display update with versioned asset links. Reload the browser page to pick up the new form; the app's Refresh button reloads data only. No new dependency, database migration or server restart is required.
+
 ## Inventory reason dropdown
 
 In **Inventory → Receive or adjust stock**, choose a reason: Opening stock, New purchase received, Stock count correction — increase, Stock count correction — decrease, Damaged / broken goods, Return to supplier, Samples / display use, Lost / missing stock, or Other adjustment.

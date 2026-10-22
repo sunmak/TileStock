@@ -1,4 +1,5 @@
 'use strict';
+const customerReturnReasons=['Excess / unused material','Wrong product ordered','Wrong product supplied','Wrong size / colour / shade','Damaged / broken goods','Defective product / quality issue','Customer changed requirement','Order cancelled','Other reason'];
 function returnNumber(id){return 'RET-'+String(id).padStart(6,'0');}
 function renderReturns(){
   const invoices=state.documents.filter(d=>d.kind==='invoice'&&d.status==='posted');
@@ -15,10 +16,16 @@ async function loadReturnItems(id){
     const d=await api('/documents/'+id);
     if($('#return-invoice').value!==String(id))return;
     const lines=d.lines.filter(l=>Number(l.returnable_quantity)>0);
-    $('#return-items').innerHTML=`<form id="receive-return" style="margin-top:24px"><h3>${number(d)} · ${esc(d.customer_name)}</h3>${table(['Product / batch','Sold','Already returned','Return now','Add to sellable stock'],lines.map(l=>`<tr><td>${esc(l.description)}<br><small>${cash(l.unit_price)} / ${esc(l.unit)}</small></td><td>${qty(l.quantity)} ${esc(l.unit)}</td><td>${qty(l.returned_quantity)}</td><td><input aria-label="Return quantity for ${esc(l.description)}" data-return-line="${l.id}" type="number" min="0" max="${esc(l.returnable_quantity)}" step="0.001" value="0" required></td><td><label class="restock-label"><input data-restock-line="${l.id}" type="checkbox" checked> Resellable</label></td></tr>`))}${field('Reason for return','reason','text','required maxlength="200"')}<p class="hint">Credit uses the original selling price. Leave quantities at zero for items not being returned. Uncheck Resellable for damaged goods. Do not also make a manual stock adjustment for this return.</p><button ${lines.length?'':'disabled'}>Receive return & update stock</button><p id="return-error" role="alert" class="error-text"></p></form>`;
+    $('#return-items').innerHTML=`<form id="receive-return" style="margin-top:24px"><h3>${number(d)} · ${esc(d.customer_name)}</h3>${table(['Product / batch','Sold','Already returned','Return now','Add to sellable stock'],lines.map(l=>`<tr><td>${esc(l.description)}<br><small>${cash(l.unit_price)} / ${esc(l.unit)}</small></td><td>${qty(l.quantity)} ${esc(l.unit)}</td><td>${qty(l.returned_quantity)}</td><td><input aria-label="Return quantity for ${esc(l.description)}" data-return-line="${l.id}" type="number" min="0" max="${esc(l.returnable_quantity)}" step="0.001" value="0" required></td><td><label class="restock-label"><input data-restock-line="${l.id}" type="checkbox" checked> Resellable</label></td></tr>`))}<label>Reason for return<select name="reason" required><option value="">Choose a reason…</option>${customerReturnReasons.map(reason=>`<option value="${esc(reason)}">${esc(reason)}</option>`).join('')}</select></label><div id="other-return-reason-field" hidden><label>Other return reason<input name="other_reason" type="text" maxlength="180" placeholder="Explain why the customer is returning these goods" disabled></label></div><p class="hint">Credit uses the original selling price. Leave quantities at zero for items not being returned. Uncheck Resellable for damaged or defective goods that cannot be sold again. The reason does not change this checkbox automatically. Do not also make a manual stock adjustment for this return.</p><button ${lines.length?'':'disabled'}>Receive return & update stock</button><p id="return-error" role="alert" class="error-text"></p></form>`;
     applyPermissions();
     let key=crypto.randomUUID();
     const form=$('#receive-return');
+    const otherReason=form.elements.other_reason;
+    form.elements.reason.onchange=()=>{
+      key=crypto.randomUUID();const other=form.elements.reason.value==='Other reason';
+      $('#other-return-reason-field').hidden=!other;otherReason.disabled=!other;otherReason.required=other;otherReason.setCustomValidity('');
+    };
+    otherReason.oninput=()=>otherReason.setCustomValidity('');
     form.oninput=()=>{key=crypto.randomUUID();};
     form.onsubmit=async e=>{
       e.preventDefault();const b=form.querySelector('button');b.disabled=true;
@@ -26,7 +33,14 @@ async function loadReturnItems(id){
         if($('#return-invoice').value!==String(id))throw Error('The selected invoice changed. Load its items before saving.');
         const selected=[...form.querySelectorAll('[data-return-line]')].filter(i=>Number(i.value)>0).map(i=>({document_line_id:Number(i.dataset.returnLine),quantity:i.value,restock:form.querySelector(`[data-restock-line="${i.dataset.returnLine}"]`).checked}));
         if(!selected.length)throw Error('Enter a return quantity for at least one item.');
-        const result=await api('/documents/'+id+'/returns',{reason:form.elements.reason.value,lines:selected,request_key:key});
+        let reason=form.elements.reason.value;
+        if(!customerReturnReasons.includes(reason))throw Error('Choose a return reason.');
+        if(reason==='Other reason'){
+          const detail=otherReason.value.trim();
+          if(!detail){otherReason.setCustomValidity('Enter the other return reason.');otherReason.reportValidity();return;}
+          reason+=': '+detail;
+        }
+        const result=await api('/documents/'+id+'/returns',{reason,lines:selected,request_key:key});
         await load();message(returnNumber(result.id)+' saved. Stock and customer balance updated.');await openReturn(result.id);
       }catch(err){$('#return-error').textContent=err.message;}finally{b.disabled=false;}
     };
