@@ -111,7 +111,7 @@ Saved invoice/estimate line units and previously recorded movement unit snapshot
 
 ## Find existing batches
 
-Open **Products & batches** to see **Saved batches** at the top of the page. Search by product name, SKU, batch name, colour, shade or size. The list shows the saved batch code, colour and available stock. Click a row's **Add stock** button to open Inventory with that exact batch selected; nothing is added until you enter a quantity/reason and save. The **Add batch** form below is for creating a new batch, not viewing existing ones. Batches are also listed under **Inventory → Stock by batch**. Press Ctrl+F5 after installing this display update; no database migration or restart is required for this frontend-only change.
+Open **Products & batches** to see **Add product** and **Add batch** first, followed by **Saved batches** and the product catalogue. Search by product name, SKU, batch name, colour, shade or size. The list shows the saved batch code, colour and available stock. Click a row's **Add stock** button to open Inventory with that exact batch selected; nothing is added until you enter a quantity/reason and save. The **Add batch** form at the top is for creating a new batch, not viewing existing ones. Batches are also listed under **Inventory → Stock by batch**. Press Ctrl+F5 after installing this display update; no database migration or restart is required for this frontend-only change.
 
 ## Search customers while creating invoices and estimates — new
 

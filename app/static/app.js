@@ -39,8 +39,8 @@ document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{page=b.dataset
 
 function mountBatchCatalogue(){
   const panel=document.createElement('section');panel.className='panel';
-  panel.innerHTML=`<div class="toolbar"><h2>Saved batches (${state.batches.length})</h2><input id="batch-catalogue-search" aria-label="Search saved batches" placeholder="Search product, SKU, batch or colour"></div><p class="hint">These batches already exist. GENERAL is the batch name for imported bill products. Use Add batch below only when creating another lot.</p><div id="batch-catalogue-table"></div>`;
-  $('#content').prepend(panel);
+  panel.innerHTML=`<div class="toolbar"><h2>Saved batches (${state.batches.length})</h2><input id="batch-catalogue-search" aria-label="Search saved batches" placeholder="Search product, SKU, batch or colour"></div><p class="hint">These batches already exist. GENERAL is the batch name for imported bill products. Use Add batch above only when creating another lot.</p><div id="batch-catalogue-table"></div>`;
+  $('#content .grid').after(panel);
   const draw=()=>{
     const query=$('#batch-catalogue-search').value.trim().toLowerCase();
     const rows=state.batches.filter(b=>[b.sku,b.name,b.code,b.colour,b.shade,b.size].join(' ').toLowerCase().includes(query));
